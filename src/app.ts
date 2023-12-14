@@ -5,6 +5,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/api/health", (req: Request, res: Response) => {
+  return res.send("health");
+});
+
+app.get("/api/abc*d", (req: Request, res: Response) => {
+  return res.send("abc*d");
+});
+
+app.get("/api/abc", (req: Request, res: Response) => {
+  return res.send("abc");
+});
+
 app
   .route("/api/books")
   .get((req: Request, res: Response) => {
