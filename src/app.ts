@@ -1,15 +1,22 @@
 import { ok } from "assert";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //dynamic path with route parameters
-app.get("/api/books/:bookId/:authorId", (req: Request, res: Response) => {
-  console.log(req.params);
+
+const handleGetBook = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response => {
+  console.log(req.params.bookId, req.params.authorId);
   return res.send(req.params);
-});
+};
+
+app.get("/api/books/:bookId/:authorId", handleGetBook);
 
 app.get("/api/health", (req: Request, res: Response) => {
   return res.send("health");
