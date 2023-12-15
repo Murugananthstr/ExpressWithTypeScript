@@ -7,16 +7,22 @@ app.use(express.urlencoded({ extended: true }));
 
 //dynamic path with route parameters
 
-const handleGetBook = (
+const handleGetBookOne = (req: Request, res: Response, next: NextFunction) => {
+  console.log("handleGetBookOne");
+  next();
+  console.log("don't use return statement after Next()");
+};
+
+const handleGetBookTwo = (
   req: Request,
   res: Response,
   next: NextFunction
 ): Response => {
-  console.log(req.params.bookId, req.params.authorId);
+  console.log(req.params, "from handleGetBookTwo");
   return res.send(req.params);
 };
 
-app.get("/api/books/:bookId/:authorId", handleGetBook);
+app.get("/api/books/:bookId/:authorId", [handleGetBookOne, handleGetBookTwo]);
 
 app.get("/api/health", (req: Request, res: Response) => {
   return res.send("health");
