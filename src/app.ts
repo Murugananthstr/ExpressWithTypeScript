@@ -5,6 +5,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//dynamic path with route parameters
+app.get("/api/books/:bookId/:authorId", (req: Request, res: Response) => {
+  console.log(req.params);
+  return res.send(req.params);
+});
+
 app.get("/api/health", (req: Request, res: Response) => {
   return res.send("health");
 });
@@ -15,6 +21,25 @@ app.get("/api/abc*d", (req: Request, res: Response) => {
 
 app.get("/api/abc", (req: Request, res: Response) => {
   return res.send("abc");
+});
+
+// Regular Expression  / symbol stands for start and end also \/ here \ is escape character for
+app.get(/\/api\/abce/, (req: Request, res: Response) => {
+  return res.send("abce");
+});
+
+//This pattern looks for the exact string "prod" followed by any single character and then the string "ct". Example: product
+app.get(/\/api\/prod.ct\//, (req: Request, res: Response) => {
+  return res.send("prod");
+});
+
+//.*: This part matches zero or more of any character (except for a newline). /api/products/  , /api/products/ABC, /api/products/123/456
+app.get(/\/api\/products\/.*/, (req: Request, res: Response) => {
+  return res.send("products");
+});
+
+app.get(/\/api\/users\/\d+\w+/, (req: Request, res: Response) => {
+  return res.send("users/01");
 });
 
 app
