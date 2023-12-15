@@ -7,22 +7,26 @@ app.use(express.urlencoded({ extended: true }));
 
 //dynamic path with route parameters
 
-const handleGetBookOne = (req: Request, res: Response, next: NextFunction) => {
-  console.log("handleGetBookOne");
+const middleware = (req: Request, res: Response, next: NextFunction) => {
+  console.log("This is middlerware where we can change the request as well");
+  // @ts-ignore
+  req.params.bookId = "100";
+  // @ts-ignore
+  req.name =
+    "some value is injected inbetween client and server in the middlerware";
   next();
-  console.log("don't use return statement after Next()");
 };
 
-const handleGetBookTwo = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Response => {
-  console.log(req.params, "from handleGetBookTwo");
-  return res.send(req.params);
-};
-
-app.get("/api/books/:bookId/:authorId", [handleGetBookOne, handleGetBookTwo]);
+app.get(
+  "/api/books/:bookId/:authorId",
+  middleware,
+  (req: Request, res: Response, next: NextFunction): Response => {
+    console.log(req.params, "from handleGetBookTwo");
+    //  @ts-ignore
+    console.log("req.Name value is :", req.name);
+    return res.send(req.params);
+  }
+);
 
 app.get("/api/health", (req: Request, res: Response) => {
   return res.send("health");
